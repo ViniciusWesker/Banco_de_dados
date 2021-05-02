@@ -1,0 +1,96 @@
+create database imovelnet;
+
+use imovelnet;
+
+create table vendedor 
+(
+cd_vendedor int not null primary key,
+nm_vendedor varchar (40),
+nm_endereco varchar (40),
+nr_cpf decimal (11),
+nm_cidade varchar (20),
+nm_bairro varchar (20),
+sg_estado char (2),
+telefone varchar (20),
+email varchar (80),
+);
+
+create table comprador
+(
+cd_comprador int not null primary key,
+nm_comprador varchar (40),
+nm_endereco varchar (40),
+nr_cpf decimal (11),
+nm_cidade varchar (20),
+nm_bairro varchar (20),
+sg_estado varchar (2),
+telefone varchar (20),
+email varchar (80)
+);
+
+create table estado
+(
+sg_estado char (2) not null primary key,
+nm_estado varchar (20),
+);
+
+create table cidade
+(
+cd_cidade int not null,
+sg_estado char (2) not null,
+nm_cidade varchar (20),
+primary key (cd_cidade, sg_estado)
+foreign key (sg_estado) references estado (sg_estado)
+);
+
+create table bairro
+(
+cd_bairro int not null,
+cd_cidade int not null,
+sg_estado char (2),
+nm_bairro varchar (20),
+primary key (cd_bairro, cd_cidade, sg_estado),
+foreign key (cd_cidade, sg_estado) references cidade (cd_cidade, sg_estado)
+);
+
+create table imovel
+(
+cd_imovel int not null primary key,
+cd_vendedor int,
+cd_bairro int,
+cd_cidade int,
+sg_estado int,
+nm_endereco int,
+nr_area_util decimal (10,2),
+ds_imovel varchar (300),
+vl_preco decimal (16,2),
+nr_ofertas int,
+st_vendido char (1),
+dt_lancamento date,
+imovel_indicado int,
+foreign key (cd_vendedor) references vendedor (cd_vendedor),
+foreign key (cd_bairro, cd_cidade, sg_estado) references bairro (cd_bairro, cd_cidade, sg_estado),
+foreign key (imovel_indicado) references imovel (imovel_indicado)
+);
+
+create table oferta
+(
+cd_imovel int not null,
+cd_comprador int not null,
+vl_oferta decimal (16,2),
+dt_oferta date,
+primary key (cd_imovel, cd_comprador),
+foreign key (cd_imovel) references imovel (cd_imovel),
+foreign key (cd_comprador) references comprador (cd_comprador)
+);
+
+create table faixa_imovel
+(
+cd_faixa int not null primary key,
+nm_faixa varchar (30),
+vl_minimo decimal (14,2),
+vl_maximi decimal (14,2)
+);
+
+
+nsert
